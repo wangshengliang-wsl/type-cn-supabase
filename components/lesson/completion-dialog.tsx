@@ -18,9 +18,25 @@ interface CompletionDialogProps {
 export function CompletionDialog({ isOpen, onClose, stats }: CompletionDialogProps) {
   const router = useRouter();
   const [showConfetti, setShowConfetti] = useState(false);
+  const [confettiData, setConfettiData] = useState<Array<{
+    left: number;
+    delay: number;
+    duration: number;
+    color: string;
+  }>>([]);
 
   useEffect(() => {
     if (isOpen) {
+      // 只在客户端生成随机数据
+      const data = Array.from({ length: 50 }, () => ({
+        left: Math.random() * 100,
+        delay: Math.random() * 2,
+        duration: 2 + Math.random() * 2,
+        color: ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'][
+          Math.floor(Math.random() * 5)
+        ],
+      }));
+      setConfettiData(data);
       setShowConfetti(true);
       // Remove confetti after animation
       const timer = setTimeout(() => setShowConfetti(false), 3000);
@@ -38,25 +54,23 @@ export function CompletionDialog({ isOpen, onClose, stats }: CompletionDialogPro
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       {/* Confetti Animation */}
-      {showConfetti && (
+      {showConfetti && confettiData.length > 0 && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(50)].map((_, i) => (
+          {confettiData.map((item, i) => (
             <div
               key={i}
               className="absolute animate-confetti"
               style={{
-                left: `${Math.random() * 100}%`,
+                left: `${item.left}%`,
                 top: '-10px',
-                animationDelay: `${Math.random() * 2}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
+                animationDelay: `${item.delay}s`,
+                animationDuration: `${item.duration}s`,
               }}
             >
               <div
                 className="w-3 h-3 rounded-full"
                 style={{
-                  backgroundColor: ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'][
-                    Math.floor(Math.random() * 5)
-                  ],
+                  backgroundColor: item.color,
                 }}
               />
             </div>

@@ -30,6 +30,8 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
   
   const inputRef = useRef<HTMLInputElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const currentAudioRef = useRef<HTMLAudioElement | null>(null); // 跟踪当前播放的音频
+  const completionTimeoutRef = useRef<NodeJS.Timeout | null>(null); // 跟踪完成定时器
   
   // Audio refs for sound effects
   const typingSoundRef = useRef<HTMLAudioElement | null>(null);
@@ -52,10 +54,35 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
     typingSoundRef.current.load();
     correctSoundRef.current.load();
     errorSoundRef.current.load();
+    
+    // Cleanup on unmount
+    return () => {
+      if (currentAudioRef.current) {
+        currentAudioRef.current.pause();
+        currentAudioRef.current = null;
+      }
+      if (completionTimeoutRef.current) {
+        clearTimeout(completionTimeoutRef.current);
+        completionTimeoutRef.current = null;
+      }
+    };
   }, []);
 
   // Auto-play audio when item changes (only after user interaction)
   useEffect(() => {
+    // 停止所有正在播放的音频
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current.currentTime = 0;
+      currentAudioRef.current = null;
+    }
+    
+    // 清除完成定时器（切换题目时）
+    if (completionTimeoutRef.current) {
+      clearTimeout(completionTimeoutRef.current);
+      completionTimeoutRef.current = null;
+    }
+    
     const tryAutoPlay = async () => {
       if (currentItem?.audio && userInteracted) {
         try {
@@ -74,24 +101,58 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
   }, [currentIndex, userInteracted]);
 
   const playAudio = async (audioUrl: string, times: number = 1) => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio();
+    // 停止之前正在播放的音频
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current.currentTime = 0;
     }
-    
-    audioRef.current.src = audioUrl;
     
     for (let i = 0; i < times; i++) {
       try {
-        await audioRef.current.play();
-        await new Promise((resolve) => {
-          audioRef.current!.onended = resolve;
+        // 创建新的 Audio 实例
+        const audio = new Audio(audioUrl);
+        currentAudioRef.current = audio;
+        
+        await audio.play();
+        
+        // 等待音频播放完成
+        await new Promise<void>((resolve) => {
+          audio.onended = () => {
+            if (currentAudioRef.current === audio) {
+              currentAudioRef.current = null;
+            }
+            resolve();
+          };
+          audio.onerror = () => {
+            if (currentAudioRef.current === audio) {
+              currentAudioRef.current = null;
+            }
+            resolve();
+          };
+          
+          // 设置超时，防止音频卡住
+          const timeoutId = setTimeout(() => {
+            if (currentAudioRef.current === audio) {
+              audio.pause();
+              currentAudioRef.current = null;
+            }
+            resolve();
+          }, 10000); // 10秒超时
+          
+          // 清理超时
+          audio.addEventListener('ended', () => clearTimeout(timeoutId), { once: true });
+          audio.addEventListener('error', () => clearTimeout(timeoutId), { once: true });
         });
+        
+        // 在多次播放之间添加延迟
         if (i < times - 1) {
-          await new Promise((resolve) => setTimeout(resolve, 300));
+          await new Promise<void>((resolve) => {
+            setTimeout(() => resolve(), 300);
+          });
         }
       } catch (error) {
         console.log('Audio play prevented:', error);
-        throw error; // Re-throw to handle in calling code
+        currentAudioRef.current = null;
       }
     }
   };
@@ -134,23 +195,112 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
     setIsCorrect(correct);
     setShowAnswer(true);
 
+    const isLastItem = currentIndex === lesson.items.length - 1;
+
     if (correct) {
       setCorrectCount(prev => prev + 1);
       playCorrectSound();
+      
+      // 保存进度到数据库
+      try {
+        await fetch('/api/progress', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            lessonId: lesson.lesson_id,
+            itemId: currentItem.item_id,
+            correct: true,
+          }),
+        });
+      } catch (error) {
+        console.error('Failed to save progress:', error);
+      }
       
       // Play audio twice on correct answer
       if (currentItem.audio) {
         await playAudio(currentItem.audio, 2);
       }
+      
+      // 如果是最后一题，自动完成课程（等待音频播放完成）
+      if (isLastItem) {
+        // 清除之前的定时器（如果存在）
+        if (completionTimeoutRef.current) {
+          clearTimeout(completionTimeoutRef.current);
+        }
+        // 等待音频播放完成后自动弹出庆祝弹窗
+        completionTimeoutRef.current = setTimeout(async () => {
+          await handleNext();
+          completionTimeoutRef.current = null;
+        }, 3000); // 3秒足够音频播放完成
+      }
     } else {
       playErrorSound();
+      
+      // 记录错误尝试
+      try {
+        await fetch('/api/progress', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            lessonId: lesson.lesson_id,
+            itemId: currentItem.item_id,
+            correct: false,
+          }),
+        });
+      } catch (error) {
+        console.error('Failed to save progress:', error);
+      }
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    // 如果已经完成，不再重复执行
+    if (isComplete) return;
+    
+    // 清除完成定时器（防止重复触发）
+    if (completionTimeoutRef.current) {
+      clearTimeout(completionTimeoutRef.current);
+      completionTimeoutRef.current = null;
+    }
+    
     if (currentIndex < lesson.items.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
+      // Lesson completed - ensure progress is saved and refreshed
+      try {
+        // 如果最后一题还没保存进度，先保存
+        if (isCorrect && showAnswer) {
+          await fetch('/api/progress', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              lessonId: lesson.lesson_id,
+              itemId: currentItem.item_id,
+              correct: true,
+            }),
+          });
+        }
+        
+        // 刷新课程进度，确保计算准确
+        await fetch('/api/progress/refresh', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            lessonId: lesson.lesson_id,
+          }),
+        });
+      } catch (error) {
+        console.error('Failed to save final progress:', error);
+      }
+      
       // Lesson completed - set complete state
       setIsComplete(true);
     }
@@ -176,11 +326,11 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
       else if (e.key === 'Enter') {
         if (showAnswer && isCorrect) {
           // If answer is shown and correct, move to next
+          // 如果是最后一题，已经在checkAnswer中自动完成了，这里不需要再处理
           if (currentIndex < lesson.items.length - 1) {
             setCurrentIndex(prev => prev + 1);
-          } else {
-            setIsComplete(true);
           }
+          // 最后一题已经在checkAnswer中自动完成，这里不做处理
         } else if (showAnswer && !isCorrect) {
           // If answer is shown and incorrect, reset for retry
           setShowAnswer(false);
@@ -203,6 +353,20 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
               correctSoundRef.current.currentTime = 0;
               correctSoundRef.current.play().catch(console.error);
             }
+            
+            // 保存进度到数据库
+            fetch('/api/progress', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                lessonId: lesson.lesson_id,
+                itemId: currentItem.item_id,
+                correct: true,
+              }),
+            }).catch(error => console.error('Failed to save progress:', error));
+            
             if (currentItem?.audio) {
               playAudio(currentItem.audio, 2).catch(() => {
                 console.log('Audio play prevented');
@@ -213,6 +377,19 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
               errorSoundRef.current.currentTime = 0;
               errorSoundRef.current.play().catch(console.error);
             }
+            
+            // 记录错误尝试
+            fetch('/api/progress', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                lessonId: lesson.lesson_id,
+                itemId: currentItem.item_id,
+                correct: false,
+              }),
+            }).catch(error => console.error('Failed to save progress:', error));
           }
         }
       }

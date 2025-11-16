@@ -19,6 +19,7 @@ export interface Lesson {
   tag: string;
   order: number;
   items: LessonItem[];
+  progress?: number; // 0-100, 学习进度百分比
 }
 
 export interface UserLessonProgress {

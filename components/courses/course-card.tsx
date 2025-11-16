@@ -13,8 +13,11 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ lesson, progress = 0 }: CourseCardProps) {
-  // TODO: Determine if course is FREE, PRO, or OWNED based on user subscription
-  const accessType = lesson.order <= 2 ? 'FREE' : 'PRO';
+  // 所有课程都是免费的
+  const accessType = 'FREE';
+  
+  // 确保进度在0-100%之间
+  const normalizedProgress = Math.max(0, Math.min(100, progress));
   
   const getAccessBadge = () => {
     switch (accessType) {
@@ -62,12 +65,12 @@ export function CourseCard({ lesson, progress = 0 }: CourseCardProps) {
         <div className="mb-4">
           <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
             <span>Progress</span>
-            <span>{progress}%</span>
+            <span>{normalizedProgress}%</span>
           </div>
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
             <div
               className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
+              style={{ width: `${normalizedProgress}%` }}
             />
           </div>
         </div>
@@ -80,7 +83,7 @@ export function CourseCard({ lesson, progress = 0 }: CourseCardProps) {
 
         <Link href={`/dashboard/lesson/${lesson.lesson_id}`}>
           <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-            {progress > 0 ? 'Continue Learning' : 'Start Learning'}
+            {normalizedProgress > 0 ? 'Continue Learning' : 'Start Learning'}
           </Button>
         </Link>
       </CardContent>
