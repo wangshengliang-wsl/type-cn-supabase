@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge';
 interface UserPermissions {
   hasLifetimeMembership: boolean;
   hasActiveSubscription: boolean;
+  subscriptionPeriodStart?: string | null;
+  subscriptionPeriodEnd?: string | null;
 }
 
 export default function MembershipPage() {
@@ -139,9 +141,20 @@ export default function MembershipPage() {
               <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
                 $10 <span className="text-lg font-normal text-gray-500">/month</span>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Billed monthly, cancel anytime
-              </p>
+              {permissions?.hasActiveSubscription && permissions?.subscriptionPeriodStart && permissions?.subscriptionPeriodEnd ? (
+                <div className="space-y-1">
+                  <p className="text-sm text-green-600 dark:text-green-400 font-medium">
+                    ✓ 当前订阅有效
+                  </p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    订阅期: {new Date(permissions.subscriptionPeriodStart).toLocaleDateString('zh-CN')} - {new Date(permissions.subscriptionPeriodEnd).toLocaleDateString('zh-CN')}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Billed monthly, cancel anytime
+                </p>
+              )}
             </div>
 
             <ul className="space-y-3">
@@ -181,7 +194,7 @@ export default function MembershipPage() {
 
             <Button
               onClick={() => handlePurchase(monthlyProductId)}
-              disabled={purchasing === monthlyProductId || permissions?.hasActiveSubscription}
+              disabled={purchasing === monthlyProductId}
               className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100"
             >
               {purchasing === monthlyProductId ? (
@@ -193,7 +206,12 @@ export default function MembershipPage() {
                   Processing...
                 </>
               ) : permissions?.hasActiveSubscription ? (
-                'Current Plan'
+                <>
+                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Renew Subscription
+                </>
               ) : (
                 'Subscribe Now'
               )}

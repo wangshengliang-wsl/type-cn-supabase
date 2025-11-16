@@ -7,6 +7,8 @@ const FREE_LESSON_ID = 'greetings_l1';
 export interface UserPermissions {
   hasLifetimeMembership: boolean;
   hasActiveSubscription: boolean;
+  subscriptionPeriodStart?: Date | null;
+  subscriptionPeriodEnd?: Date | null;
   purchasedLessons: string[]; // Array of lessonIds
   canAccessLesson: (lessonId: string) => boolean;
 }
@@ -54,7 +56,14 @@ export async function getUserPermissions(
     .limit(1);
 
   const hasActiveSubscription = activeSubscription.length > 0;
+  const subscriptionPeriodStart = activeSubscription[0]?.currentPeriodStart || null;
+  const subscriptionPeriodEnd = activeSubscription[0]?.currentPeriodEnd || null;
+  
   console.log('💳 Has active subscription:', hasActiveSubscription);
+  console.log('📅 Subscription period:', { 
+    start: subscriptionPeriodStart, 
+    end: subscriptionPeriodEnd 
+  });
 
   // Get purchased individual lessons
   const purchases = await db
@@ -75,6 +84,8 @@ export async function getUserPermissions(
   return {
     hasLifetimeMembership,
     hasActiveSubscription,
+    subscriptionPeriodStart,
+    subscriptionPeriodEnd,
     purchasedLessons,
     canAccessLesson: (lessonId: string) => {
       // Free lesson

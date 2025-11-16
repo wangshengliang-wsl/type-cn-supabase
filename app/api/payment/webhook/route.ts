@@ -145,6 +145,13 @@ async function handleSubscriptionActive(data: any) {
   const { id: subscriptionId, product, customer, status } = data;
   const productId = product?.id || '';
 
+  console.log('🔄 Handling subscription active/renewal:', {
+    subscriptionId,
+    status,
+    currentPeriodStart: data.current_period_start_date,
+    currentPeriodEnd: data.current_period_end_date,
+  });
+
   // Find existing subscription
   const existing = await db
     .select()
@@ -153,6 +160,15 @@ async function handleSubscriptionActive(data: any) {
     .limit(1);
 
   if (existing.length > 0) {
+    const newPeriodEnd = data.current_period_end_date
+      ? new Date(data.current_period_end_date)
+      : undefined;
+    
+    console.log('✅ Updating existing subscription:', {
+      oldPeriodEnd: existing[0].currentPeriodEnd,
+      newPeriodEnd,
+    });
+
     await db
       .update(userSubscriptions)
       .set({
@@ -160,12 +176,12 @@ async function handleSubscriptionActive(data: any) {
         currentPeriodStart: data.current_period_start_date
           ? new Date(data.current_period_start_date)
           : undefined,
-        currentPeriodEnd: data.current_period_end_date
-          ? new Date(data.current_period_end_date)
-          : undefined,
+        currentPeriodEnd: newPeriodEnd,
         updatedAt: new Date(),
       })
       .where(eq(userSubscriptions.subscriptionId, subscriptionId));
+  } else {
+    console.warn('⚠️ Subscription not found, might be first payment');
   }
 }
 
