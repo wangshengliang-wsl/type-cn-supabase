@@ -2,11 +2,18 @@ import { CourseList } from "@/components/courses/course-list";
 import { db } from "@/lib/db";
 import { lessons, lessonItems, userLessonProgress } from "@/lib/db/schema";
 import { createClient } from "@/lib/supabase/server";
+import { getUserPermissions } from "@/lib/creem/permissions";
 import { eq, sql } from "drizzle-orm";
 
 export default async function CoursesPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+
+  // Get user permissions
+  let permissions = null;
+  if (user) {
+    permissions = await getUserPermissions(user.id);
+  }
 
   // 获取所有课程
   const allLessons = await db
@@ -40,6 +47,8 @@ export default async function CoursesPage() {
         }
       }
 
+      const canAccess = permissions?.canAccessLesson(lesson.lessonId) || false;
+
       return {
         lesson_id: lesson.lessonId,
         title_en: lesson.titleEn,
@@ -58,22 +67,27 @@ export default async function CoursesPage() {
           audio: item.audio,
         })),
         progress,
+        canAccess,
       };
     })
   );
 
   return (
-    <div className="container mx-auto p-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+    <div className="container mx-auto p-8 max-w-7xl">
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3 tracking-tight">
           Course Store
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Browse and start learning from our collection of courses
+        <p className="text-lg text-gray-600 dark:text-gray-400">
+          Browse and start learning from our curated courses
         </p>
       </div>
 
-      <CourseList lessons={lessonsWithProgress} />
+      <CourseList 
+        lessons={lessonsWithProgress} 
+        hasLifetime={permissions?.hasLifetimeMembership || false}
+        hasSubscription={permissions?.hasActiveSubscription || false}
+      />
     </div>
   );
 }

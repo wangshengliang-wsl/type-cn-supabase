@@ -6,10 +6,12 @@ import { CourseCard } from './course-card';
 import { Badge } from '@/components/ui/badge';
 
 interface CourseListProps {
-  lessons: Lesson[];
+  lessons: (Lesson & { canAccess?: boolean })[];
+  hasLifetime?: boolean;
+  hasSubscription?: boolean;
 }
 
-export function CourseList({ lessons }: CourseListProps) {
+export function CourseList({ lessons, hasLifetime = false, hasSubscription = false }: CourseListProps) {
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
 
   // Extract unique tags
@@ -61,7 +63,14 @@ export function CourseList({ lessons }: CourseListProps) {
       {/* Course Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredLessons.map(lesson => (
-          <CourseCard key={lesson.lesson_id} lesson={lesson} progress={lesson.progress || 0} />
+          <CourseCard 
+            key={lesson.lesson_id} 
+            lesson={lesson} 
+            progress={lesson.progress || 0}
+            canAccess={lesson.canAccess || false}
+            hasLifetime={hasLifetime}
+            hasSubscription={hasSubscription}
+          />
         ))}
       </div>
 

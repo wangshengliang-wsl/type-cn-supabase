@@ -67,6 +67,50 @@ export const userStats = pgTable('user_stats', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+// 用户订阅表
+export const userSubscriptions = pgTable('user_subscriptions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').notNull(),
+  subscriptionId: text('subscription_id').notNull().unique(), // Creem subscription ID
+  productId: text('product_id').notNull(), // MONTHLY_PRO_PID
+  status: text('status').notNull(), // active, canceled, expired, etc.
+  currentPeriodStart: timestamp('current_period_start'),
+  currentPeriodEnd: timestamp('current_period_end'),
+  canceledAt: timestamp('canceled_at'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+// 用户购买记录表（单节课程和终身会员）
+export const userPurchases = pgTable('user_purchases', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').notNull(),
+  orderId: text('order_id').notNull().unique(), // Creem order ID
+  productId: text('product_id').notNull(), // SINGLE_COURSE_PID or LIFETIME_PRO_PID
+  lessonId: text('lesson_id'), // Only for single course purchases
+  amount: integer('amount').notNull(), // in cents
+  currency: text('currency').notNull(),
+  status: text('status').notNull(), // paid, refunded, etc.
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+// 交易记录表（支付历史）
+export const transactions = pgTable('transactions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  userId: uuid('user_id').notNull(),
+  transactionId: text('transaction_id').notNull().unique(), // Creem transaction ID
+  checkoutId: text('checkout_id').notNull(), // Creem checkout ID
+  orderId: text('order_id'), // Creem order ID (if applicable)
+  subscriptionId: text('subscription_id'), // Creem subscription ID (if applicable)
+  productId: text('product_id').notNull(),
+  type: text('type').notNull(), // 'single_course', 'subscription', 'lifetime'
+  amount: integer('amount').notNull(), // in cents
+  currency: text('currency').notNull(),
+  status: text('status').notNull(), // completed, pending, failed, refunded
+  metadata: jsonb('metadata'), // Store additional data like lessonId for single courses
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
 // 导出类型
 export type Lesson = typeof lessons.$inferSelect;
 export type NewLesson = typeof lessons.$inferInsert;
@@ -78,3 +122,9 @@ export type UserItemProgress = typeof userItemProgress.$inferSelect;
 export type NewUserItemProgress = typeof userItemProgress.$inferInsert;
 export type UserStats = typeof userStats.$inferSelect;
 export type NewUserStats = typeof userStats.$inferInsert;
+export type UserSubscription = typeof userSubscriptions.$inferSelect;
+export type NewUserSubscription = typeof userSubscriptions.$inferInsert;
+export type UserPurchase = typeof userPurchases.$inferSelect;
+export type NewUserPurchase = typeof userPurchases.$inferInsert;
+export type Transaction = typeof transactions.$inferSelect;
+export type NewTransaction = typeof transactions.$inferInsert;

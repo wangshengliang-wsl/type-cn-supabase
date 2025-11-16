@@ -20,6 +20,7 @@ export interface Lesson {
   order: number;
   items: LessonItem[];
   progress?: number; // 0-100, 学习进度百分比
+  canAccess?: boolean; // Whether user has access to this lesson
 }
 
 export interface UserLessonProgress {
