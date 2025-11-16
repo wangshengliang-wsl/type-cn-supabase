@@ -96,7 +96,7 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
     <aside className="w-64 bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800 flex flex-col h-screen flex-shrink-0">
       {/* Logo & Membership Status */}
       <div className="p-6 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
-        <Link href="/dashboard" className="flex items-center gap-2 mb-4">
+        <Link href="/" className="flex items-center gap-2 mb-4">
           <span className="text-xl font-bold text-gray-900 dark:text-white">
             TypeCN
           </span>
