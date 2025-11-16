@@ -44,6 +44,8 @@ export default function PaymentSuccessPage() {
 
         if (data.completed) {
           setVerified(true);
+          // 触发权限更新事件
+          window.dispatchEvent(new Event('permissionsUpdated'));
         } else {
           setError('Payment not completed yet. Please wait...');
         }

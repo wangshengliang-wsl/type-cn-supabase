@@ -47,25 +47,39 @@ export function CourseCard({
   const handlePurchase = async () => {
     setPurchasing(true);
     try {
+      const singleCoursePid = process.env.NEXT_PUBLIC_SINGLE_COURSE_PID;
+      console.log('🛒 Starting purchase for lesson:', lesson.lesson_id);
+      console.log('🔑 Product ID:', singleCoursePid);
+      
+      if (!singleCoursePid) {
+        alert('单课程产品ID未配置，请联系管理员');
+        setPurchasing(false);
+        return;
+      }
+      
       const response = await fetch('/api/payment/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          productId: process.env.NEXT_PUBLIC_SINGLE_COURSE_PID,
+          productId: singleCoursePid,
           lessonId: lesson.lesson_id,
         }),
       });
 
       const data = await response.json();
+      console.log('📦 Checkout response:', data);
       
-      if (data.checkoutUrl) {
+      if (response.ok && data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
+      } else {
+        console.error('❌ Checkout failed:', data);
+        alert(data.error || '购买失败，请重试');
       }
     } catch (error) {
       console.error('Purchase error:', error);
-      alert('Failed to start purchase. Please try again.');
+      alert('购买失败，请重试');
     } finally {
       setPurchasing(false);
     }
@@ -74,7 +88,8 @@ export function CourseCard({
   const handleCardClick = (e: React.MouseEvent) => {
     if (isLocked) {
       e.preventDefault();
-      router.push('/dashboard/membership');
+      // 直接购买单个课程
+      handlePurchase();
     }
   };
 
@@ -134,26 +149,39 @@ export function CourseCard({
           </span>
         </div>
 
-        <Link 
-          href={isLocked ? '#' : `/dashboard/lesson/${lesson.lesson_id}`} 
-          className="block"
-          onClick={handleCardClick}
-        >
-          <Button className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors">
-            {isLocked ? (
+        {isLocked ? (
+          <Button 
+            onClick={handlePurchase}
+            disabled={purchasing}
+            className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+          >
+            {purchasing ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Processing...
+              </>
+            ) : (
               <>
                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-                Upgrade to Access
+                Buy This Course
               </>
-            ) : normalizedProgress > 0 ? (
-              'Continue Learning'
-            ) : (
-              'Start Learning'
             )}
           </Button>
+        ) : (
+          <Link 
+            href={`/dashboard/lesson/${lesson.lesson_id}`} 
+            className="block"
+          >
+            <Button className="w-full bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors">
+            {normalizedProgress > 0 ? 'Continue Learning' : 'Start Learning'}
+          </Button>
         </Link>
+        )}
       </CardContent>
     </Card>
   );

@@ -17,12 +17,25 @@ export default function MembershipPage() {
 
   useEffect(() => {
     fetchPermissions();
+    
+    // 监听权限更新事件
+    const handlePermissionsUpdated = () => {
+      console.log('🔄 Permissions updated, refreshing membership page...');
+      fetchPermissions();
+    };
+    
+    window.addEventListener('permissionsUpdated', handlePermissionsUpdated);
+    
+    return () => {
+      window.removeEventListener('permissionsUpdated', handlePermissionsUpdated);
+    };
   }, []);
 
   const fetchPermissions = async () => {
     try {
       const response = await fetch('/api/payment/permissions');
       const data = await response.json();
+      console.log('📊 Permissions data:', data);
       setPermissions(data);
     } catch (error) {
       console.error('Error fetching permissions:', error);
@@ -34,6 +47,7 @@ export default function MembershipPage() {
   const handlePurchase = async (productId: string) => {
     setPurchasing(productId);
     try {
+      console.log('🛒 Starting purchase with productId:', productId);
       const response = await fetch('/api/payment/checkout', {
         method: 'POST',
         headers: {
@@ -43,9 +57,13 @@ export default function MembershipPage() {
       });
 
       const data = await response.json();
+      console.log('📦 Checkout response:', data);
       
-      if (data.checkoutUrl) {
+      if (response.ok && data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
+      } else {
+        console.error('❌ Checkout failed:', data);
+        alert(data.error || 'Failed to start purchase. Please try again.');
       }
     } catch (error) {
       console.error('Purchase error:', error);
@@ -55,7 +73,7 @@ export default function MembershipPage() {
     }
   };
 
-  const monthlyProductId = process.env.NEXT_PUBLIC_MONTHLY_PRO_PID || '';
+  const monthlyProductId = process.env.NEXT_PUBLIC_PRO_MEMBERSHIP_PID || '';
   const lifetimeProductId = process.env.NEXT_PUBLIC_LIFETIME_PRO_PID || '';
 
   if (loading) {
@@ -119,7 +137,7 @@ export default function MembershipPage() {
           <CardContent className="space-y-6">
             <div>
               <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                $9.99 <span className="text-lg font-normal text-gray-500">/month</span>
+                $10 <span className="text-lg font-normal text-gray-500">/month</span>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Billed monthly, cancel anytime
@@ -204,7 +222,7 @@ export default function MembershipPage() {
           <CardContent className="space-y-6">
             <div>
               <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                $99.99 <span className="text-lg font-normal text-gray-500">/once</span>
+                $99 <span className="text-lg font-normal text-gray-500">/once</span>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Save $20+ compared to 12 months

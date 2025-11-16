@@ -18,19 +18,27 @@ export async function getUserPermissions(
   userId: string
 ): Promise<UserPermissions> {
   // Check for lifetime membership
+  const lifetimeProductId = process.env.NEXT_PUBLIC_LIFETIME_PRO_PID || '';
+  const monthlyProductId = process.env.NEXT_PUBLIC_PRO_MEMBERSHIP_PID || '';
+  const singleCourseProductId = process.env.NEXT_PUBLIC_SINGLE_COURSE_PID || '';
+  
+  console.log('🔍 Checking permissions for user:', userId);
+  console.log('📦 Product IDs:', { lifetimeProductId, monthlyProductId, singleCourseProductId });
+  
   const lifetimePurchase = await db
     .select()
     .from(userPurchases)
     .where(
       and(
         sql`${userPurchases.userId}::text = ${userId}`,
-        eq(userPurchases.productId, process.env.LIFETIME_PRO_PID || ''),
+        eq(userPurchases.productId, lifetimeProductId),
         eq(userPurchases.status, 'paid')
       )
     )
     .limit(1);
 
   const hasLifetimeMembership = lifetimePurchase.length > 0;
+  console.log('🎖️ Has lifetime membership:', hasLifetimeMembership);
 
   // Check for active subscription
   const activeSubscription = await db
@@ -39,13 +47,14 @@ export async function getUserPermissions(
     .where(
       and(
         sql`${userSubscriptions.userId}::text = ${userId}`,
-        eq(userSubscriptions.productId, process.env.MONTHLY_PRO_PID || ''),
+        eq(userSubscriptions.productId, monthlyProductId),
         eq(userSubscriptions.status, 'active')
       )
     )
     .limit(1);
 
   const hasActiveSubscription = activeSubscription.length > 0;
+  console.log('💳 Has active subscription:', hasActiveSubscription);
 
   // Get purchased individual lessons
   const purchases = await db
@@ -54,7 +63,7 @@ export async function getUserPermissions(
     .where(
       and(
         sql`${userPurchases.userId}::text = ${userId}`,
-        eq(userPurchases.productId, process.env.SINGLE_COURSE_PID || ''),
+        eq(userPurchases.productId, singleCourseProductId),
         eq(userPurchases.status, 'paid')
       )
     );

@@ -14,7 +14,16 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { productId, lessonId } = body;
 
+    console.log('📦 Checkout request:', { productId, lessonId, userId: user.id });
+    console.log('🔑 Environment check:', {
+      hasCreemKey: !!process.env.CREEM_API_KEY,
+      hasProPid: !!process.env.PRO_MEMBERSHIP_PID,
+      hasSinglePid: !!process.env.SINGLE_COURSE_PID,
+      siteUrl: process.env.NEXT_PUBLIC_SITE_URL,
+    });
+
     if (!productId) {
+      console.error('❌ No productId provided');
       return NextResponse.json(
         { error: 'Product ID is required' },
         { status: 400 }
@@ -31,7 +40,9 @@ export async function POST(request: Request) {
     }
 
     // For single course purchases, lessonId is required
-    if (productId === process.env.SINGLE_COURSE_PID && !lessonId) {
+    const singleCoursePid = process.env.NEXT_PUBLIC_SINGLE_COURSE_PID;
+    if (productId === singleCoursePid && !lessonId) {
+      console.error('❌ Lesson ID required for single course purchase');
       return NextResponse.json(
         { error: 'Lesson ID is required for single course purchase' },
         { status: 400 }

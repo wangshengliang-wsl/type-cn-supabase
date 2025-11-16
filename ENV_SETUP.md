@@ -8,6 +8,7 @@
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+DATABASE_URL=your_database_connection_string
 ```
 
 ### Creem 支付配置
@@ -16,14 +17,19 @@ CREEM_API_KEY=your_creem_api_key
 NEXT_PUBLIC_CREEM_URL=https://test-api.creem.io  # 或生产环境URL
 ```
 
-### 产品ID配置
+### 产品ID配置（⚠️ 必须使用 NEXT_PUBLIC_ 前缀）
 ```bash
-# 会员订阅产品ID
-PRO_MEMBERSHIP_PID=your_pro_membership_product_id
+# 月度会员订阅产品ID（例如：prod_2z33UasJaSLnNkAXtli3ka）
+NEXT_PUBLIC_PRO_MEMBERSHIP_PID=your_monthly_pro_product_id
 
-# 单课程购买产品ID
-SINGLE_COURSE_PID=your_single_course_product_id
+# 终身会员产品ID
+NEXT_PUBLIC_LIFETIME_PRO_PID=your_lifetime_pro_product_id
+
+# 单课程购买产品ID（例如：prod_2tOa3X2Gop6l1rjRusjc60）
+NEXT_PUBLIC_SINGLE_COURSE_PID=your_single_course_product_id
 ```
+
+**重要提示：** 这些产品ID必须与 Creem 后台创建的产品ID完全一致！
 
 ### 站点配置
 ```bash

@@ -6,12 +6,10 @@ import { CourseCard } from './course-card';
 import { Badge } from '@/components/ui/badge';
 
 interface CourseListProps {
-  lessons: (Lesson & { canAccess?: boolean })[];
-  hasLifetime?: boolean;
-  hasSubscription?: boolean;
+  lessons: (Lesson & { canAccess?: boolean; hasLifetime?: boolean; hasSubscription?: boolean })[];
 }
 
-export function CourseList({ lessons, hasLifetime = false, hasSubscription = false }: CourseListProps) {
+export function CourseList({ lessons }: CourseListProps) {
   const [selectedTags, setSelectedTags] = useState<Set<string>>(new Set());
 
   // Extract unique tags
@@ -68,8 +66,8 @@ export function CourseList({ lessons, hasLifetime = false, hasSubscription = fal
             lesson={lesson} 
             progress={lesson.progress || 0}
             canAccess={lesson.canAccess || false}
-            hasLifetime={hasLifetime}
-            hasSubscription={hasSubscription}
+            hasLifetime={lesson.hasLifetime || false}
+            hasSubscription={lesson.hasSubscription || false}
           />
         ))}
       </div>

@@ -56,9 +56,27 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
     };
 
     fetchPermissions();
-  }, []);
+    
+    // 监听路由变化和自定义事件，刷新权限
+    const handleRefresh = () => {
+      console.log('🔄 Refreshing permissions...');
+      fetchPermissions();
+    };
+    
+    // 监听自定义事件（购买成功时触发）
+    window.addEventListener('permissionsUpdated', handleRefresh);
+    
+    return () => {
+      window.removeEventListener('permissionsUpdated', handleRefresh);
+    };
+  }, [pathname]); // 依赖pathname，路由变化时重新获取
 
   const getMembershipStatus = () => {
+    console.log('🏷️ Membership status check:', {
+      hasLifetime: permissions?.hasLifetimeMembership,
+      hasSubscription: permissions?.hasActiveSubscription,
+    });
+    
     if (permissions?.hasLifetimeMembership) return 'Lifetime Pro';
     if (permissions?.hasActiveSubscription) return 'Pro';
     return 'Free';
