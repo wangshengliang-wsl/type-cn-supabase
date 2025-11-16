@@ -1,0 +1,406 @@
+[
+  {
+    "lesson_id": "greetings_l1",
+    "title_en": "Basic Greetings",
+    "title_zh": "基础问候",
+    "description_en": "After finishing this lesson you will be able to greet people in Mandarin, say goodbye politely, and express thanks in everyday situations.",
+    "cover": "https://static-main.aiyeshi.cn/typecn-images/greetings.png",
+    "tag": "Greeting",
+    "order": 1,
+    "items": [
+      {
+        "item_id": "2c3a9f33-5b49-4b82-ab4a-9bc9466d887e",
+        "type": "word",
+        "en": "Hello",
+        "zh": "你好",
+        "py": "ni3hao3",
+        "accepted": ["nihao", "ni hao", "ni3hao3", "ni3 hao3"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/nihao.mp3"
+      },
+      {
+        "item_id": "f8e91d42-3c7a-4b1e-9f82-1a2b3c4d5e6f",
+        "type": "word",
+        "en": "Thank you",
+        "zh": "谢谢",
+        "py": "xie4xie4",
+        "accepted": ["xiexie", "xie xie", "xie4xie4", "xie4 xie4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/xiexie.mp3"
+      },
+      {
+        "item_id": "59ea1fa2-6ceb-4c97-890b-8a1e8d205b9f",
+        "type": "word",
+        "en": "Good-bye",
+        "zh": "再见",
+        "py": "zai4jian4",
+        "accepted": ["zaijian", "zai jian", "zai4jian4", "zai4 jian4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/zaijian.mp3"
+      },
+      {
+        "item_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "type": "word",
+        "en": "Good morning",
+        "zh": "早上好",
+        "py": "zao3shang4hao3",
+        "accepted": ["zaoshanghao", "zao shang hao", "zao3shang4hao3", "zao3 shang4 hao3"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/zaoshanghao.mp3"
+      },
+      {
+        "item_id": "b2c3d4e5-f6g7-8901-bcde-f23456789012",
+        "type": "word",
+        "en": "Good evening",
+        "zh": "晚上好",
+        "py": "wan3shang4hao3",
+        "accepted": ["wanshanghao", "wan shang hao", "wan3shang4hao3", "wan3 shang4 hao3"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/wanshanghao.mp3"
+      },
+      {
+        "item_id": "c3d4e5f6-g7h8-9012-cdef-345678901234",
+        "type": "word",
+        "en": "May I ask…",
+        "zh": "请问",
+        "py": "qing3wen4",
+        "accepted": ["qingwen", "qing wen", "qing3wen4", "qing3 wen4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/qingwen.mp3"
+      },
+      {
+        "item_id": "d4e5f6g7-h8i9-0123-defg-456789012345",
+        "type": "word",
+        "en": "Sorry",
+        "zh": "对不起",
+        "py": "dui4bu4qi3",
+        "accepted": ["duibuqi", "dui bu qi", "dui4bu4qi3", "dui4 bu4 qi3"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/duibuqi.mp3"
+      },
+      {
+        "item_id": "e5f6g7h8-i9j0-1234-efgh-567890123456",
+        "type": "word",
+        "en": "It's OK",
+        "zh": "没关系",
+        "py": "mei2guan1xi4",
+        "accepted": ["meiguanxi", "mei guan xi", "mei2guan1xi4", "mei2 guan1 xi4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/meiguanxi.mp3"
+      },
+      {
+        "item_id": "f6g7h8i9-j0k1-2345-fghi-678901234567",
+        "type": "word",
+        "en": "Welcome",
+        "zh": "欢迎",
+        "py": "huan1ying2",
+        "accepted": ["huanying", "huan ying", "huan1ying2", "huan1 ying2"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/huanying.mp3"
+      },
+      {
+        "item_id": "g7h8i9j0-k1l2-3456-ghij-789012345678",
+        "type": "word",
+        "en": "Congratulations",
+        "zh": "恭喜",
+        "py": "gong1xi3",
+        "accepted": ["gongxi", "gong xi", "gong1xi3", "gong1 xi3"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/gongxi.mp3"
+      }
+    ]
+  },
+  {
+    "lesson_id": "conversation_l1",
+    "title_en": "Casual Conversation",
+    "title_zh": "日常对话",
+    "description_en": "Learn common casual conversation phrases that Chinese people use in everyday situations to sound more natural and friendly.",
+    "cover": "https://static-main.aiyeshi.cn/typecn-images/conversation.png",
+    "tag": "Conversation",
+    "order": 2,
+    "items": [
+      {
+        "item_id": "h8i9j0k1-l2m3-4567-hijk-890123456789",
+        "type": "word",
+        "en": "Have you eaten?",
+        "zh": "吃了吗？",
+        "py": "chi1le5ma5",
+        "accepted": ["chilema", "chi le ma", "chi1le ma", "chi1 le ma"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/chilema.mp3"
+      },
+      {
+        "item_id": "i9j0k1l2-m3n4-5678-ijkl-901234567890",
+        "type": "word",
+        "en": "Thanks for waiting",
+        "zh": "久等了",
+        "py": "jiu3deng3le5",
+        "accepted": ["jiudengle", "jiu deng le", "jiu3deng3le", "jiu3 deng3 le"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/jiudengle.mp3"
+      },
+      {
+        "item_id": "j0k1l2m3-n4o5-6789-jklm-012345678901",
+        "type": "word",
+        "en": "Come on!",
+        "zh": "加油",
+        "py": "jia1you2",
+        "accepted": ["jiayou", "jia you", "jia1you2", "jia1 you2"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/jiayou.mp3"
+      },
+      {
+        "item_id": "k1l2m3n4-o5p6-7890-klmn-123456789012",
+        "type": "word",
+        "en": "Let's go",
+        "zh": "走吧",
+        "py": "zou3ba5",
+        "accepted": ["zouba", "zou ba", "zou3ba", "zou3 ba"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/zouba.mp3"
+      },
+      {
+        "item_id": "l2m3n4o5-p6q7-8901-lmno-234567890123",
+        "type": "word",
+        "en": "Long time no see",
+        "zh": "好久不见",
+        "py": "hao3jiu3bu4jian4",
+        "accepted": ["haojiubujian", "hao jiu bu jian", "hao3jiu3bu4jian4", "hao3 jiu3 bu4 jian4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/haojiubujian.mp3"
+      },
+      {
+        "item_id": "m3n4o5p6-q7r8-9012-mnop-345678901234",
+        "type": "word",
+        "en": "Wait a moment",
+        "zh": "等一下",
+        "py": "deng3yi2xia4",
+        "accepted": ["dengyixia", "deng yi xia", "deng3yi2xia4", "deng3 yi2 xia4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/dengyixia.mp3"
+      },
+      {
+        "item_id": "n4o5p6q7-r8s9-0123-nopq-456789012345",
+        "type": "word",
+        "en": "Take care",
+        "zh": "慢走",
+        "py": "man4zou3",
+        "accepted": ["manzou", "man zou", "man4zou3", "man4 zou3"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/manzou.mp3"
+      },
+      {
+        "item_id": "o5p6q7r8-s9t0-1234-opqr-567890123456",
+        "type": "word",
+        "en": "Be careful",
+        "zh": "小心",
+        "py": "xiao3xin1",
+        "accepted": ["xiaoxin", "xiao xin", "xiao3xin1", "xiao3 xin1"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/xiaoxin.mp3"
+      },
+      {
+        "item_id": "p6q7r8s9-t0u1-2345-pqrs-678901234567",
+        "type": "word",
+        "en": "Good luck",
+        "zh": "祝你好运",
+        "py": "zhu4ni3hao3yun4",
+        "accepted": ["zhunihaoyun", "zhu ni hao yun", "zhu4ni3hao3yun4", "zhu4 ni3 hao3 yun4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/zhunihaoyun.mp3"
+      },
+      {
+        "item_id": "q7r8s9t0-u1v2-3456-qrst-789012345678",
+        "type": "word",
+        "en": "Happy birthday",
+        "zh": "生日快乐",
+        "py": "sheng1ri4kuai4le4",
+        "accepted": ["shengrikuaile", "sheng ri kuai le", "sheng1ri4kuai4le4", "sheng1 ri4 kuai4 le4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/shengrikuaile.mp3"
+      }
+    ]
+  },
+  {
+    "lesson_id": "restaurant_l1",
+    "title_en": "Ordering Basics",
+    "title_zh": "点餐基础",
+    "description_en": "Learn essential vocabulary and phrases for ordering food and drinks at Chinese restaurants.",
+    "cover": "https://static-main.aiyeshi.cn/typecn-images/order.png",
+    "tag": "Food",
+    "order": 3,
+    "items": [
+      {
+        "item_id": "r8s9t0u1-v2w3-4567-rstu-890123456789",
+        "type": "word",
+        "en": "Waiter / Waitress",
+        "zh": "服务员",
+        "py": "fu2wu4yuan2",
+        "accepted": ["fuwuyuan", "fu wu yuan", "fu2wu4yuan2", "fu2 wu4 yuan2"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/fuwuyuan.mp3"
+      },
+      {
+        "item_id": "s9t0u1v2-w3x4-5678-stuv-901234567890",
+        "type": "word",
+        "en": "Menu",
+        "zh": "菜单",
+        "py": "cai4dan1",
+        "accepted": ["caidan", "cai dan", "cai4dan1", "cai4 dan1"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/caidan.mp3"
+      },
+      {
+        "item_id": "t0u1v2w3-x4y5-6789-tuvw-012345678901",
+        "type": "word",
+        "en": "Order food",
+        "zh": "点菜",
+        "py": "dian3cai4",
+        "accepted": ["diancai", "dian cai", "dian3cai4", "dian3 cai4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/diancai.mp3"
+      },
+      {
+        "item_id": "u1v2w3x4-y5z6-7890-uvwx-123456789012",
+        "type": "word",
+        "en": "Place an order",
+        "zh": "点单",
+        "py": "dian3dan1",
+        "accepted": ["diandan", "dian dan", "dian3dan1", "dian3 dan1"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/diandan.mp3"
+      },
+      {
+        "item_id": "v2w3x4y5-z6a7-8901-vwxy-234567890123",
+        "type": "word",
+        "en": "Rice",
+        "zh": "米饭",
+        "py": "mi3fan4",
+        "accepted": ["mifan", "mi fan", "mi3fan4", "mi3 fan4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/mifan.mp3"
+      },
+      {
+        "item_id": "w3x4y5z6-a7b8-9012-wxyz-345678901234",
+        "type": "word",
+        "en": "Dumplings",
+        "zh": "饺子",
+        "py": "jiao3zi5",
+        "accepted": ["jiaozi", "jiao zi", "jiao3zi", "jiao3 zi"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/jiaozi.mp3"
+      },
+      {
+        "item_id": "x4y5z6a7-b8c9-0123-xyza-456789012345",
+        "type": "word",
+        "en": "Noodles",
+        "zh": "面条",
+        "py": "mian4tiao2",
+        "accepted": ["miantiao", "mian tiao", "mian4tiao2", "mian4 tiao2"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/miantiao.mp3"
+      },
+      {
+        "item_id": "y5z6a7b8-c9d0-1234-yzab-567890123456",
+        "type": "word",
+        "en": "Bottled water",
+        "zh": "瓶装水",
+        "py": "ping2zhuang1shui3",
+        "accepted": ["pingzhuangshui", "ping zhuang shui", "ping2zhuang1shui3", "ping2 zhuang1 shui3"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/pingzhuangshui.mp3"
+      },
+      {
+        "item_id": "z6a7b8c9-d0e1-2345-zabc-678901234567",
+        "type": "word",
+        "en": "Beer",
+        "zh": "啤酒",
+        "py": "pi2jiu3",
+        "accepted": ["pijiu", "pi jiu", "pi2jiu3", "pi2 jiu3"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/pijiu.mp3"
+      },
+      {
+        "item_id": "a7b8c9d0-e1f2-3456-abcd-789012345678",
+        "type": "word",
+        "en": "Green tea",
+        "zh": "绿茶",
+        "py": "lu4cha2",
+        "accepted": ["lucha", "lu cha", "lu4cha2", "lu4 cha2"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/lvcha.mp3"
+      }
+    ]
+  },
+  {
+    "lesson_id": "restaurant_l2",
+    "title_en": "Dining Requests",
+    "title_zh": "用餐要求",
+    "description_en": "Learn how to make specific requests about food preferences, spice levels, and dining needs.",
+    "cover": "https://static-main.aiyeshi.cn/typecn-images/dining.png",
+    "tag": "Food",
+    "order": 4,
+    "items": [
+      {
+        "item_id": "b8c9d0e1-f2g3-4567-bcde-890123456789",
+        "type": "word",
+        "en": "Pay the bill",
+        "zh": "买单",
+        "py": "mai3dan1",
+        "accepted": ["maidan", "mai dan", "mai3dan1", "mai3 dan1"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/maidan.mp3"
+      },
+      {
+        "item_id": "c9d0e1f2-g3h4-5678-cdef-901234567890",
+        "type": "word",
+        "en": "Take away",
+        "zh": "打包",
+        "py": "da3bao1",
+        "accepted": ["dabao", "da bao", "da3bao1", "da3 bao1"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/dabao.mp3"
+      },
+      {
+        "item_id": "d0e1f2g3-h4i5-6789-defg-012345678901",
+        "type": "word",
+        "en": "Spicy",
+        "zh": "辣的",
+        "py": "la4de5",
+        "accepted": ["lade", "la de", "la4de", "la4 de"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/lade.mp3"
+      },
+      {
+        "item_id": "e1f2g3h4-i5j6-7890-efgh-123456789012",
+        "type": "word",
+        "en": "No spice",
+        "zh": "不要辣",
+        "py": "bu4yao4la4",
+        "accepted": ["buyaola", "bu yao la", "bu4yao4la4", "bu4 yao4 la4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/buyaola.mp3"
+      },
+      {
+        "item_id": "f2g3h4i5-j6k7-8901-fghi-234567890123",
+        "type": "word",
+        "en": "Extra spicy",
+        "zh": "多放辣",
+        "py": "duo1fang4la4",
+        "accepted": ["duofangla", "duo fang la", "duo1fang4la4", "duo1 fang4 la4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/duofangla.mp3"
+      },
+      {
+        "item_id": "g3h4i5j6-k7l8-9012-ghij-345678901234",
+        "type": "word",
+        "en": "Sweet",
+        "zh": "甜的",
+        "py": "tian2de5",
+        "accepted": ["tiande", "tian de", "tian2de", "tian2 de"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/tiande.mp3"
+      },
+      {
+        "item_id": "h4i5j6k7-l8m9-0123-hijk-456789012345",
+        "type": "word",
+        "en": "Light flavor",
+        "zh": "清淡",
+        "py": "qing1dan4",
+        "accepted": ["qingdan", "qing dan", "qing1dan4", "qing1 dan4"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/qingdan.mp3"
+      },
+      {
+        "item_id": "i5j6k7l8-m9n0-1234-ijkl-567890123456",
+        "type": "word",
+        "en": "Vegetarian",
+        "zh": "素食",
+        "py": "su4shi2",
+        "accepted": ["sushi", "su shi", "su4shi2", "su4 shi2"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/sushi.mp3"
+      },
+      {
+        "item_id": "j6k7l8m9-n0o1-2345-jklm-678901234567",
+        "type": "word",
+        "en": "Hot",
+        "zh": "热的",
+        "py": "re4de5",
+        "accepted": ["rede", "re de", "re4de", "re4 de"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/rede.mp3"
+      },
+      {
+        "item_id": "k7l8m9n0-o1p2-3456-klmn-789012345678",
+        "type": "word",
+        "en": "Cold / Iced",
+        "zh": "冰的",
+        "py": "bing1de5",
+        "accepted": ["bingde", "bing de", "bing1de", "bing1 de"],
+        "audio": "https://static-main.aiyeshi.cn/typecn-audio/bingde.mp3"
+      }
+    ]
+  }
+]
