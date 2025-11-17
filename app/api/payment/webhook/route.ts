@@ -7,6 +7,7 @@ import {
 } from '@/lib/db/schema';
 import { verifyCreemSignature, getProductType } from '@/lib/creem/webhook';
 import { eq } from 'drizzle-orm';
+import type { CreemCheckoutObject, CreemSubscriptionObject } from '@/lib/creem/types';
 
 export async function POST(request: Request) {
   try {
@@ -34,8 +35,6 @@ export async function POST(request: Request) {
     const payload = JSON.parse(body);
     const { eventType, object } = payload;
 
-    console.log(`Received webhook: ${eventType}`, object);
-
     // Handle different event types
     switch (eventType) {
       case 'checkout.completed':
@@ -57,7 +56,8 @@ export async function POST(request: Request) {
         break;
 
       default:
-        console.log(`Unhandled event type: ${eventType}`);
+        // Unhandled event type
+        break;
     }
 
     return NextResponse.json({ received: true });
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
   }
 }
 
-async function handleCheckoutCompleted(data: any) {
+async function handleCheckoutCompleted(data: CreemCheckoutObject) {
   const { id: checkoutId, order, product, subscription, metadata } = data;
 
   // Extract user ID from metadata
@@ -112,8 +112,12 @@ async function handleCheckoutCompleted(data: any) {
         .update(userSubscriptions)
         .set({
           status: subscription.status,
-          currentPeriodStart: new Date(subscription.current_period_start_date),
-          currentPeriodEnd: new Date(subscription.current_period_end_date),
+          currentPeriodStart: subscription.current_period_start_date 
+            ? new Date(subscription.current_period_start_date) 
+            : undefined,
+          currentPeriodEnd: subscription.current_period_end_date 
+            ? new Date(subscription.current_period_end_date) 
+            : undefined,
           updatedAt: new Date(),
         })
         .where(eq(userSubscriptions.subscriptionId, subscription.id));
@@ -123,8 +127,12 @@ async function handleCheckoutCompleted(data: any) {
         subscriptionId: subscription.id,
         productId,
         status: subscription.status,
-        currentPeriodStart: new Date(subscription.current_period_start_date),
-        currentPeriodEnd: new Date(subscription.current_period_end_date),
+        currentPeriodStart: subscription.current_period_start_date 
+          ? new Date(subscription.current_period_start_date) 
+          : undefined,
+        currentPeriodEnd: subscription.current_period_end_date 
+          ? new Date(subscription.current_period_end_date) 
+          : undefined,
       });
     }
   } else {
@@ -141,16 +149,8 @@ async function handleCheckoutCompleted(data: any) {
   }
 }
 
-async function handleSubscriptionActive(data: any) {
-  const { id: subscriptionId, product, customer, status } = data;
-  const productId = product?.id || '';
-
-  console.log('🔄 Handling subscription active/renewal:', {
-    subscriptionId,
-    status,
-    currentPeriodStart: data.current_period_start_date,
-    currentPeriodEnd: data.current_period_end_date,
-  });
+async function handleSubscriptionActive(data: CreemSubscriptionObject) {
+  const { id: subscriptionId, status } = data;
 
   // Find existing subscription
   const existing = await db
@@ -163,11 +163,6 @@ async function handleSubscriptionActive(data: any) {
     const newPeriodEnd = data.current_period_end_date
       ? new Date(data.current_period_end_date)
       : undefined;
-    
-    console.log('✅ Updating existing subscription:', {
-      oldPeriodEnd: existing[0].currentPeriodEnd,
-      newPeriodEnd,
-    });
 
     await db
       .update(userSubscriptions)
@@ -180,12 +175,10 @@ async function handleSubscriptionActive(data: any) {
         updatedAt: new Date(),
       })
       .where(eq(userSubscriptions.subscriptionId, subscriptionId));
-  } else {
-    console.warn('⚠️ Subscription not found, might be first payment');
   }
 }
 
-async function handleSubscriptionCanceled(data: any) {
+async function handleSubscriptionCanceled(data: CreemSubscriptionObject) {
   const { id: subscriptionId, status, canceled_at } = data;
 
   await db
@@ -198,7 +191,7 @@ async function handleSubscriptionCanceled(data: any) {
     .where(eq(userSubscriptions.subscriptionId, subscriptionId));
 }
 
-async function handleRefundCreated(data: any) {
+async function handleRefundCreated(data: { transaction?: { id?: string }; order?: { id?: string } }) {
   const { transaction, order } = data;
 
   if (transaction?.id) {

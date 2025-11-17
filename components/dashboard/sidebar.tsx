@@ -59,7 +59,6 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
     
     // 监听路由变化和自定义事件，刷新权限
     const handleRefresh = () => {
-      console.log('🔄 Refreshing permissions...');
       fetchPermissions();
     };
     
@@ -72,11 +71,6 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
   }, [pathname]); // 依赖pathname，路由变化时重新获取
 
   const getMembershipStatus = () => {
-    console.log('🏷️ Membership status check:', {
-      hasLifetime: permissions?.hasLifetimeMembership,
-      hasSubscription: permissions?.hasActiveSubscription,
-    });
-    
     if (permissions?.hasLifetimeMembership) return 'Lifetime Pro';
     if (permissions?.hasActiveSubscription) return 'Pro';
     return 'Free';

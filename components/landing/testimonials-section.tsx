@@ -73,7 +73,7 @@ export function TestimonialsSection() {
                 ))}
               </div>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                "{testimonial.content}"
+                &ldquo;{testimonial.content}&rdquo;
               </p>
               <div className="flex items-center gap-3">
                 <div className="text-3xl">{testimonial.avatar}</div>

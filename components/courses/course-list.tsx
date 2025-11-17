@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Lesson, LessonTag } from '@/lib/types';
+import type { Lesson } from '@/lib/types';
 import { CourseCard } from './course-card';
 import { Badge } from '@/components/ui/badge';
 

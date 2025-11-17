@@ -24,23 +24,13 @@ export function getProductType(productId: string): 'single_course' | 'subscripti
   const monthlyProPid = process.env.NEXT_PUBLIC_PRO_MEMBERSHIP_PID;
   const lifetimeProPid = process.env.NEXT_PUBLIC_LIFETIME_PRO_PID;
   
-  console.log('🔍 Determining product type:', {
-    productId,
-    singleCoursePid,
-    monthlyProPid,
-    lifetimeProPid,
-  });
-  
   if (productId === singleCoursePid) {
-    console.log('✅ Product type: single_course');
     return 'single_course';
   }
   if (productId === monthlyProPid) {
-    console.log('✅ Product type: subscription');
     return 'subscription';
   }
   if (productId === lifetimeProPid) {
-    console.log('✅ Product type: lifetime');
     return 'lifetime';
   }
   

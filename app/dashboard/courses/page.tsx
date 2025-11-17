@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import { CourseList } from '@/components/courses/course-list';
 
+import type { Lesson } from '@/lib/types';
+
 export default function CoursesPage() {
-  const [lessonsWithProgress, setLessonsWithProgress] = useState<any[]>([]);
+  const [lessonsWithProgress, setLessonsWithProgress] = useState<(Lesson & { progress?: number; canAccess?: boolean })[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchCourses = async () => {
@@ -24,7 +26,6 @@ export default function CoursesPage() {
     
     // 监听权限更新事件
     const handlePermissionsUpdated = () => {
-      console.log('🔄 Permissions updated, refreshing courses...');
       fetchCourses();
     };
     

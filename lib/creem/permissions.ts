@@ -24,9 +24,6 @@ export async function getUserPermissions(
   const monthlyProductId = process.env.NEXT_PUBLIC_PRO_MEMBERSHIP_PID || '';
   const singleCourseProductId = process.env.NEXT_PUBLIC_SINGLE_COURSE_PID || '';
   
-  console.log('🔍 Checking permissions for user:', userId);
-  console.log('📦 Product IDs:', { lifetimeProductId, monthlyProductId, singleCourseProductId });
-  
   const lifetimePurchase = await db
     .select()
     .from(userPurchases)
@@ -40,7 +37,6 @@ export async function getUserPermissions(
     .limit(1);
 
   const hasLifetimeMembership = lifetimePurchase.length > 0;
-  console.log('🎖️ Has lifetime membership:', hasLifetimeMembership);
 
   // Check for active subscription
   const activeSubscription = await db
@@ -58,12 +54,6 @@ export async function getUserPermissions(
   const hasActiveSubscription = activeSubscription.length > 0;
   const subscriptionPeriodStart = activeSubscription[0]?.currentPeriodStart || null;
   const subscriptionPeriodEnd = activeSubscription[0]?.currentPeriodEnd || null;
-  
-  console.log('💳 Has active subscription:', hasActiveSubscription);
-  console.log('📅 Subscription period:', { 
-    start: subscriptionPeriodStart, 
-    end: subscriptionPeriodEnd 
-  });
 
   // Get purchased individual lessons
   const purchases = await db

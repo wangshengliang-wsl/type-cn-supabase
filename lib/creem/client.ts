@@ -16,7 +16,7 @@ export class CreemClient {
   async createCheckout(params: {
     product_id: string;
     success_url: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, string>;
   }) {
     if (!this.apiKey) {
       throw new Error('CREEM_API_KEY is not configured. Please check your .env.local file.');

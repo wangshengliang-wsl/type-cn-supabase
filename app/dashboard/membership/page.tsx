@@ -22,7 +22,6 @@ export default function MembershipPage() {
     
     // 监听权限更新事件
     const handlePermissionsUpdated = () => {
-      console.log('🔄 Permissions updated, refreshing membership page...');
       fetchPermissions();
     };
     
@@ -37,7 +36,6 @@ export default function MembershipPage() {
     try {
       const response = await fetch('/api/payment/permissions');
       const data = await response.json();
-      console.log('📊 Permissions data:', data);
       setPermissions(data);
     } catch (error) {
       console.error('Error fetching permissions:', error);
@@ -49,7 +47,6 @@ export default function MembershipPage() {
   const handlePurchase = async (productId: string) => {
     setPurchasing(productId);
     try {
-      console.log('🛒 Starting purchase with productId:', productId);
       const response = await fetch('/api/payment/checkout', {
         method: 'POST',
         headers: {
@@ -59,7 +56,6 @@ export default function MembershipPage() {
       });
 
       const data = await response.json();
-      console.log('📦 Checkout response:', data);
       
       if (response.ok && data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
@@ -316,15 +312,15 @@ export default function MembershipPage() {
               Can I cancel my subscription anytime?
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Yes! You can cancel your monthly subscription at any time. You'll continue to have access until the end of your billing period.
+              Yes! You can cancel your monthly subscription at any time. You&apos;ll continue to have access until the end of your billing period.
             </p>
           </div>
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-              What's the difference between Pro and Lifetime?
+              What&apos;s the difference between Pro and Lifetime?
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Pro is a monthly subscription that gives you access as long as you're subscribed. Lifetime is a one-time payment that gives you access forever, including all future courses.
+              Pro is a monthly subscription that gives you access as long as you&apos;re subscribed. Lifetime is a one-time payment that gives you access forever, including all future courses.
             </p>
           </div>
           <div>

@@ -1,3 +1,4 @@
+// creem 生成签名算法
 import * as crypto from "crypto";
 
 function generateSignature(payload, secret) {

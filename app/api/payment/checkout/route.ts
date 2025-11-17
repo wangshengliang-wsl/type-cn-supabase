@@ -14,14 +14,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { productId, lessonId } = body;
 
-    console.log('📦 Checkout request:', { productId, lessonId, userId: user.id });
-    console.log('🔑 Environment check:', {
-      hasCreemKey: !!process.env.CREEM_API_KEY,
-      hasProPid: !!process.env.PRO_MEMBERSHIP_PID,
-      hasSinglePid: !!process.env.SINGLE_COURSE_PID,
-      siteUrl: process.env.NEXT_PUBLIC_SITE_URL,
-    });
-
     if (!productId) {
       console.error('❌ No productId provided');
       return NextResponse.json(
@@ -53,7 +45,7 @@ export async function POST(request: Request) {
     const successUrl = `${siteUrl}/payment/success`;
 
     // Prepare metadata
-    const metadata: Record<string, any> = {
+    const metadata: Record<string, string> = {
       userId: user.id,
       productId,
     };

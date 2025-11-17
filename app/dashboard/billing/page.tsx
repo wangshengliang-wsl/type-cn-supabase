@@ -12,7 +12,7 @@ interface Transaction {
   amount: number;
   currency: string;
   status: string;
-  metadata: any;
+  metadata: Record<string, unknown>;
   createdAt: string;
 }
 
@@ -51,7 +51,7 @@ export default function BillingPage() {
     });
   };
 
-  const getProductName = (type: string, metadata: any) => {
+  const getProductName = (type: string, metadata: Record<string, unknown>) => {
     if (type === 'single_course') {
       return `Single Course${metadata?.lessonId ? ` (${metadata.lessonId})` : ''}`;
     }

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Lesson, LessonItem } from '@/lib/types';
+import { useState, useEffect, useRef } from 'react';
+import type { Lesson } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -29,7 +29,6 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
   const [showExitDialog, setShowExitDialog] = useState(false);
   
   const inputRef = useRef<HTMLInputElement>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const currentAudioRef = useRef<HTMLAudioElement | null>(null); // 跟踪当前播放的音频
   
   // Audio refs for sound effects
@@ -76,8 +75,8 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
       if (currentItem?.audio && userInteracted) {
         try {
           await playAudio(currentItem.audio, 2);
-        } catch (error) {
-          console.log('Auto-play prevented:', error);
+        } catch {
+          // Auto-play prevented
         }
       }
     };
@@ -87,6 +86,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
     setIsCorrect(null);
     setShowAnswer(false);
     inputRef.current?.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, userInteracted]);
 
   const playAudio = async (audioUrl: string, times: number = 1) => {
@@ -139,8 +139,8 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
             setTimeout(() => resolve(), 300);
           });
         }
-      } catch (error) {
-        console.log('Audio play prevented:', error);
+      } catch {
+        // Audio play prevented
         currentAudioRef.current = null;
       }
     }
@@ -183,8 +183,6 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
 
     setIsCorrect(correct);
     setShowAnswer(true);
-
-    const isLastItem = currentIndex === lesson.items.length - 1;
 
     if (correct) {
       setCorrectCount(prev => prev + 1);
@@ -276,7 +274,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
         e.preventDefault();
         if (currentItem?.audio) {
           playAudio(currentItem.audio, 1).catch(() => {
-            console.log('Audio play prevented');
+            // Audio play prevented
           });
         }
       }
@@ -323,7 +321,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
             
             if (currentItem?.audio) {
               playAudio(currentItem.audio, 2).catch(() => {
-                console.log('Audio play prevented');
+                // Audio play prevented
               });
             }
           } else {
@@ -351,6 +349,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
 
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showAnswer, isCorrect, userInput, currentItem, currentIndex, lesson.items.length]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -372,7 +371,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
       // Try to play the audio for the current item now
       if (currentItem?.audio) {
         playAudio(currentItem.audio, 2).catch(() => {
-          console.log('First audio play prevented');
+          // First audio play prevented
         });
       }
     }
@@ -473,7 +472,7 @@ export function LessonPlayer({ lesson }: LessonPlayerProps) {
                   setUserInteracted(true);
                   if (currentItem.audio) {
                     playAudio(currentItem.audio, 1).catch(() => {
-                      console.log('Audio play prevented');
+                      // Audio play prevented
                     });
                   }
                 }}

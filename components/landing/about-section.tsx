@@ -26,7 +26,7 @@ export function AboutSection() {
               TypeCN is designed specifically for English speakers learning Chinese. Our platform combines proven language learning techniques with modern technology to make mastering Chinese typing easy and enjoyable.
             </p>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
-              Whether you're preparing for HSK exams, planning to study in China, or simply passionate about Chinese culture, our structured courses will help you achieve your goals.
+              Whether you&apos;re preparing for HSK exams, planning to study in China, or simply passionate about Chinese culture, our structured courses will help you achieve your goals.
             </p>
             <div className="grid grid-cols-2 gap-6 mt-8">
               <div className="text-center p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl">

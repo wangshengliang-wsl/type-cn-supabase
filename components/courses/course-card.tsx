@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 const FREE_LESSON_ID = 'greetings_l1';
 
@@ -23,10 +22,7 @@ export function CourseCard({
   lesson, 
   progress = 0, 
   canAccess = false,
-  hasLifetime = false,
-  hasSubscription = false
 }: CourseCardProps) {
-  const router = useRouter();
   const [purchasing, setPurchasing] = useState(false);
   const isFree = lesson.lesson_id === FREE_LESSON_ID;
   const isLocked = !isFree && !canAccess;
@@ -48,8 +44,6 @@ export function CourseCard({
     setPurchasing(true);
     try {
       const singleCoursePid = process.env.NEXT_PUBLIC_SINGLE_COURSE_PID;
-      console.log('🛒 Starting purchase for lesson:', lesson.lesson_id);
-      console.log('🔑 Product ID:', singleCoursePid);
       
       if (!singleCoursePid) {
         alert('单课程产品ID未配置，请联系管理员');
@@ -69,7 +63,6 @@ export function CourseCard({
       });
 
       const data = await response.json();
-      console.log('📦 Checkout response:', data);
       
       if (response.ok && data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
@@ -82,14 +75,6 @@ export function CourseCard({
       alert('购买失败，请重试');
     } finally {
       setPurchasing(false);
-    }
-  };
-
-  const handleCardClick = (e: React.MouseEvent) => {
-    if (isLocked) {
-      e.preventDefault();
-      // 直接购买单个课程
-      handlePurchase();
     }
   };
 

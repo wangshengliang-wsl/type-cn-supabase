@@ -3,6 +3,7 @@ import { LessonPlayer } from "@/components/lesson/lesson-player";
 import { db } from "@/lib/db";
 import { lessons, lessonItems } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import type { Lesson } from "@/lib/types";
 
 interface LessonPageProps {
   params: Promise<{
@@ -29,7 +30,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
     .where(eq(lessonItems.lessonId, lessonId))
     .orderBy(lessonItems.order);
 
-  const lesson = {
+  const lesson: Lesson = {
     lesson_id: lessonResult[0].lessonId,
     title_en: lessonResult[0].titleEn,
     title_zh: lessonResult[0].titleZh,
@@ -39,7 +40,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
     order: lessonResult[0].order,
     items: items.map((item) => ({
       item_id: item.itemId,
-      type: item.type,
+      type: item.type as 'word' | 'sentence',
       en: item.en,
       zh: item.zh,
       py: item.py,

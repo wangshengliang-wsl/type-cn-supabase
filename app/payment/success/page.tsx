@@ -23,10 +23,8 @@ export default function PaymentSuccessPage() {
 
     // Set timeout for verification
     const timeoutId = setTimeout(() => {
-      if (verifying) {
-        setError('Payment verification timeout. Please check your account.');
-        setVerifying(false);
-      }
+      setError('Payment verification timeout. Please check your account.');
+      setVerifying(false);
     }, 10000);
 
     // Verify payment status

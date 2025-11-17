@@ -107,7 +107,7 @@ export default async function DashboardPage() {
               Study status today
             </CardDescription>
             <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
-              Today's Status
+              Today&apos;s Status
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -162,7 +162,7 @@ export default async function DashboardPage() {
               {recentProgress.map((progress) => {
                 // 确保进度不超过100%
                 const progressPercent = Math.min(100, Math.round(
-                  (progress.completedItems / progress.totalItems) * 100
+                  ((progress.completedItems ?? 0) / progress.totalItems) * 100
                 ));
                 return (
                   <Link

@@ -19,7 +19,18 @@ export async function GET() {
     const allLessons = await db
       .select({
         lesson: lessons,
-        items: sql<any>`json_agg(${lessonItems}.* ORDER BY ${lessonItems.order})`,
+        items: sql<Array<{
+          id: string;
+          itemId: string;
+          lessonId: string;
+          type: string;
+          en: string;
+          zh: string;
+          py: string;
+          accepted: string[];
+          audio: string;
+          order: number;
+        }>>`json_agg(${lessonItems}.* ORDER BY ${lessonItems.order})`,
       })
       .from(lessons)
       .leftJoin(lessonItems, eq(lessons.lessonId, lessonItems.lessonId))
@@ -81,7 +92,15 @@ export async function GET() {
         cover: lessonData.cover,
         tag: lessonData.tag,
         order: lessonData.order,
-        items: items.map((item: any) => ({
+        items: (items as Array<{
+          itemId: string;
+          type: string;
+          en: string;
+          zh: string;
+          py: string;
+          accepted: string[];
+          audio: string;
+        }>).map((item) => ({
             item_id: item.itemId,
             type: item.type,
             en: item.en,
@@ -90,7 +109,9 @@ export async function GET() {
             accepted: item.accepted,
             audio: item.audio,
           })),
-        progress: progress ? (progress.completedItems / progress.totalItems) * 100 : 0,
+        progress: progress && progress.completedItems !== null && progress.totalItems > 0 
+          ? (progress.completedItems / progress.totalItems) * 100 
+          : 0,
         canAccess,
         hasLifetime,
         hasSubscription,

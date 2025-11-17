@@ -144,9 +144,10 @@ export async function POST(request: Request) {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-    if (existingStats.length > 0) {
+    if (existingStats.length > 0 && existingStats[0]) {
       const lastStudy = existingStats[0].lastStudyDate;
-      let newStreak = existingStats[0].currentStreak;
+      const currentStreak = existingStats[0].currentStreak ?? 0;
+      let newStreak = currentStreak;
 
       if (lastStudy) {
         const lastStudyDate = new Date(
@@ -160,10 +161,10 @@ export async function POST(request: Request) {
 
         if (daysDiff === 0) {
           // 今天已经学习过
-          newStreak = existingStats[0].currentStreak;
+          newStreak = currentStreak;
         } else if (daysDiff === 1) {
           // 连续学习
-          newStreak = existingStats[0].currentStreak + 1;
+          newStreak = currentStreak + 1;
         } else {
           // 中断了
           newStreak = 1;
@@ -178,7 +179,7 @@ export async function POST(request: Request) {
           totalLessonsCompleted: Number(totalLessonsCompleted[0].count),
           totalItemsCompleted: Number(totalItemsCompleted[0].count),
           currentStreak: newStreak,
-          longestStreak: Math.max(newStreak, existingStats[0].longestStreak),
+          longestStreak: Math.max(newStreak, existingStats[0].longestStreak ?? 0),
           lastStudyDate: now,
           updatedAt: now,
         })
